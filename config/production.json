@@ -1,0 +1,28 @@
+{
+  "host": "localhost",
+  "port": 3333,
+  "socketioHost": "http://localhost:3333",
+  "mysql": "mysql://root:root@localhost:3306/feathersReactBojler",
+  "public": "dist/static/",
+  "auth": {
+    "idField": "id",
+    "token": {
+      "secret": "/dLoXk3OoOtf9jZAI9VAhpe4KLV6EBeydLZnRDMUKARLXCdOMSI+sFw==wXUJGY5foRvs63Y4mNX8ufiB5R8Bhi09jZAI9VAhpe4KLV6EBeyd"
+    },
+    "local": {},
+    "facebook": {
+      "clientID": "your facebook client id",
+      "clientSecret": "your facebook client secret",
+      "permissions": {
+        "scope": ["public_profile","email"]
+      }
+    },
+    "google": {
+      "clientID": "your google client id",
+      "clientSecret": "your google client secret",
+      "permissions": {
+        "scope": ["profile"]
+      }
+    }
+  }
+}
