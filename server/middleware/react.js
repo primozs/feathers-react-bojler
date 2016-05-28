@@ -3,10 +3,10 @@ import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { match, RouterContext } from 'react-router';
 import { renderToString } from 'react-dom/server';
-import makeStore from '../../shared/app/store/makeStoreSrv';
+import makeStore from '../../client/app/store/makeStoreSrv';
 import { fetchComponentData } from '../util/fetchData';
-import routes from '../../shared/app/routes';
-import { getLocaleMessagesData } from '../../shared/app/locale/util';
+import routes from '../../client/app/routes';
+import { getLocaleMessagesData } from '../../client/app/locale/util';
 
 const renderFullPage = (html, initialState) => {
   const style = process.env.NODE_ENV === 'production'

@@ -17,7 +17,7 @@
     "npm": ">= 3.8.3"
   },
   "scripts": {
-    "test": "mocha shared/tests/*.spec.js --compilers js:babel-register",
+    "test": "mocha client/tests/*.spec.js --compilers js:babel-register",
     "test:server": "NODE_ENV=test npm run jshint && mocha --compilers js:babel-register --recursive server/tests/**/*.spec.js",
     "jshint": "jshint src/. test/. --config",
     "start": "NODE_ENV=development nodemon server/index.js",
@@ -25,14 +25,14 @@
     "copy:static": "rsync -rtvuc --delete static/ dist/static/",
     "copy:config": "rsync -rtvuc --delete config/ dist/config/",
     "build:server": "NODE_ENV=production babel server -d dist/server",
-    "build:shared": "NODE_ENV=production babel shared -d dist/shared",
+    "build:client_dir": "NODE_ENV=production babel client -d dist/client",
     "build:client": "NODE_ENV=production webpack --config webpack.config.prod.js",
-    "build": "npm run build:server && npm run build:shared && npm run build:client",
+    "build": "npm run build:server && npm run build:client_dir && npm run build:client",
     "start:prod": "NODE_ENV=production node dist/server/app.js",
     "bs": "npm run clean && npm run copy:static && npm run copy:config && npm run build && npm run start:prod",
     "slate": "rimraf node_modules && npm install",
     "push": "git push origin && git push origin --tags",
-    "lint": "eslint client server shared",
+    "lint": "eslint client server",
     "release:patch": "npm version patch",
     "release:minor": "npm version minor",
     "release:major": "npm version major"
