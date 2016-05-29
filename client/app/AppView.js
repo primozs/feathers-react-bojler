@@ -5,34 +5,7 @@ import Footer from 'grommet/components/Footer';
 import FormattedMessage from 'grommet/components/FormattedMessage';
 import AppHeader from './components/AppHeader';
 
-let config;
-if (process.env.NODE_ENV === 'production') {
-  config = require('../../config/production');
-} else {
-  config = require('../../config/default');
-}
-
-const feathers = require('feathers/client');
-const socketio = require('feathers-socketio/client');
-const hooks = require('feathers-hooks');
-const io = require('socket.io-client');
-
-const socket = io(config.socketioHost);
-const app = feathers()
-  .configure(hooks())
-  .configure(socketio(socket));
-//.configure(feathers.authentication({
-//  storage: window.localStorage
-//}));
-
 class AppView extends React.Component {
-
-  getChildContext() {
-    return {
-      feathers: app
-    };
-  }
-
   render() {
     return (
       <App centered={false} inline={true}>
@@ -65,9 +38,4 @@ AppView.propTypes = {
 
 AppView.defaultProps = {};
 
-AppView.childContextTypes = {
-  feathers: React.PropTypes.object.isRequired
-};
-
 export default AppView;
-module.exports = AppView;

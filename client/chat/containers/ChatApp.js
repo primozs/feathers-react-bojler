@@ -10,6 +10,7 @@ import ChatSidebar from '../components/ChatSidebar';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as chatActionCreators from '../actions/chatActions';
+import * as authActionCreators from '../../app/actions/authActions';
 
 class ChatApp extends React.Component {
   constructor(props, context) {
@@ -18,10 +19,15 @@ class ChatApp extends React.Component {
   }
 
   componentDidMount() {
-    const userService = this.context.feathers.service('users');
+    const { feathers } = this.context;
+    const userService = feathers.service('users');
     this.props.chatActions.findUsers(userService);
 
-    const messageService = this.context.feathers.service('messages');
+    userService.on('created', (user) => {
+      this.props.chatActions.getUserSuccess(user);
+    });
+
+    const messageService = feathers.service('messages');
     this.props.chatActions.findMessages({
       query: {
         $sort: {createdAt: 1},
@@ -29,7 +35,9 @@ class ChatApp extends React.Component {
       }
     }, messageService);
 
-
+    messageService.on('created', (message) => {
+      this.props.chatActions.sendMessageSuccess(message);
+    });
   }
 
   sendMessage(text) {
@@ -39,7 +47,7 @@ class ChatApp extends React.Component {
   render() {
     return (
       <Split flex="right" fixed={true}>
-        <ChatSidebar users={this.props.chat.users} />
+        <ChatSidebar users={this.props.chat.users}/>
         <Box fixed={true}>
           <Header size="medium"/>
           <MessageList
@@ -54,21 +62,36 @@ class ChatApp extends React.Component {
 }
 
 ChatApp.propTypes = {
-  chat: React.PropTypes.object
+  auth: React.PropTypes.object,
+  authActions: React.PropTypes.object,
+  chat: React.PropTypes.object,
+  chatActions: React.PropTypes.object
 };
 ChatApp.defaultProps = {};
+
 ChatApp.contextTypes = {
   feathers: React.PropTypes.object
 };
 
+// ChatApp.need = [
+//  (params) => {
+//    return authActionCreators.keepLoginServer(params.feathersJwt, params.feathers);
+//  },
+//  (params) => {
+//    return chatActionCreators.findUsers(params.feathers.service('users'));
+//  }
+// ];
+
 function mapStateToProps(state) {
   return {
+    auth: state.auth,
     chat: state.chat
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    authActions: bindActionCreators(authActionCreators, dispatch),
     chatActions: bindActionCreators(chatActionCreators, dispatch)
   };
 }

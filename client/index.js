@@ -8,6 +8,8 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { IntlProvider } from 'react-intl';
 import routes from './app/routes';
 import { getLocaleMessagesData } from './app/locale/util';
+import FeathersProvider from './feathers/FeathersProvider';
+import feathersApp from './feathers/makeFeathers';
 
 const localeData = getLocaleMessagesData();
 
@@ -27,7 +29,9 @@ match({routes, location}, () => {
   ReactDOM.render(
     <Provider store={store}>
       <IntlProvider locale={localeData.locale} messages={localeData.messages}>
-        <Router routes={routes} history={history}/>
+        <FeathersProvider feathers={feathersApp}>
+          <Router routes={routes} history={history}/>
+        </FeathersProvider>
       </IntlProvider>
     </Provider>,
     appElement);

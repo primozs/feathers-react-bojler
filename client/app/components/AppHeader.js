@@ -7,6 +7,8 @@ import Anchor from 'grommet/components/Anchor';
 import FormattedMessage from 'grommet/components/FormattedMessage';
 import Logo from './Logo';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as authActionCreators from '../../app/actions/authActions';
 import UserMenu from './UserMenu';
 import LangMenu from './LangMenu';
 
@@ -16,7 +18,11 @@ class AppHeader extends React.Component {
   }
 
   onMenuClick(location) {
-    this.context.router.push(location);
+    if (location === '/logout') {
+      this.props.authActions.logOut(this.context.feathers);
+    } else {
+      this.context.router.push(location);
+    }
   }
 
   render() {
@@ -29,6 +35,16 @@ class AppHeader extends React.Component {
         />
       );
     });
+
+    let userEmail = null;
+    if (this.props.auth.user) {
+      let email = this.props.auth.user.email.split('@')[0];
+      userEmail = (
+        <Menu direction="row" pad={{horizontal: 'small'}}>
+          <Anchor>{email}</Anchor>
+        </Menu>
+      );
+    }
 
     return (
       <Header
@@ -52,6 +68,7 @@ class AppHeader extends React.Component {
             isAuthenticated={this.props.auth.isAuthenticated}
             onMenuClick={this.onMenuClick.bind(this)}
           />
+          {userEmail}
         <LangMenu
           dropAlign={{right: 'right', top: 'top', direction: 'right'}}
           menuItems={this.props.nav.languages}
@@ -64,13 +81,15 @@ class AppHeader extends React.Component {
 
 AppHeader.propTypes = {
   nav: React.PropTypes.object,
-  auth: React.PropTypes.object
+  auth: React.PropTypes.object,
+  authActions: React.PropTypes.object
 };
 
 AppHeader.defaultProps = {};
 
 AppHeader.contextTypes = {
-  router: React.PropTypes.object
+  router: React.PropTypes.object,
+  feathers: React.PropTypes.object
 };
 
 function mapStateToProps(state) {
@@ -80,6 +99,13 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    authActions: bindActionCreators(authActionCreators, dispatch)
+  };
+}
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(AppHeader);

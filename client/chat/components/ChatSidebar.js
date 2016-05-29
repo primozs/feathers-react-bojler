@@ -1,4 +1,4 @@
-import React, { PropTypes as T} from 'react';
+import React, { PropTypes } from 'react';
 import Sidebar from 'grommet/components/Sidebar';
 import Box from 'grommet/components/Box';
 import Header from 'grommet/components/Header';
@@ -19,7 +19,7 @@ class ChatSidebar extends React.Component {
   }
 
   render() {
-    const users = this.props.users;
+    let { users } = this.props.chat;
 
     return (
       <Sidebar fixed={true} size="medium" colorIndex="light-2">
@@ -39,7 +39,7 @@ class ChatSidebar extends React.Component {
           {
             users.map((user) => {
               return (
-                <li>
+                <li key={user.id}>
                   <a href="#">
                     <Image src={user.avatar || PLACEHOLDER} size="thumb"/>
                     <span style={{padding: '10px'}}>{user.email}</span>
@@ -62,19 +62,19 @@ class ChatSidebar extends React.Component {
 }
 
 ChatSidebar.propTypes = {
-  users: T.array,
-  nav: T.object,
-  auth: T.object,
-  dispatch: T.func
+  nav: PropTypes.object,
+  auth: PropTypes.object,
+  chat: PropTypes.object,
+  dispatch: PropTypes.func
 };
-ChatSidebar.defaultProps = {
-  users: []
-};
+
+ChatSidebar.defaultProps = {};
 
 function mapStateToProps(state) {
   return {
     nav: state.nav,
-    auth: state.auth
+    auth: state.auth,
+    chat: state.chat
   };
 }
 

@@ -25,5 +25,11 @@ module.exports = {
   "users": "{itemCount, plural, =0 {Uporabnik} one {Uporabnik} two {Uporabnika} other {# Uporabniki}}",
   "Anonymous": "Anonimnež",
   "Name": "Ime priimek",
-  "Email": "Elektronska pošta"
+  "Email": "Elektronska pošta",
+  "signupTitle": "Pridobi uporabniški račun",
+  "Password": "Geslo",
+  "Log In": "Prijava",
+  "email must be unique": "E-poštni naslov že obstaja",
+  "loginTitle": "Prijava v aplikacijo",
+  "Profile": "Profil"
 };

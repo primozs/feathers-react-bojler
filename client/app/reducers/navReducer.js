@@ -25,6 +25,11 @@ const initialState = {
       auth: false
     },
     {
+      loc: '/profile',
+      label: 'Profile',
+      auth: true
+    },
+    {
       loc: '/logout',
       label: 'Logout',
       auth: true

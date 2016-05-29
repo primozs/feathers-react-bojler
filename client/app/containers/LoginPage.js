@@ -7,6 +7,7 @@ import Anchor from 'grommet/components/Anchor';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as authActionCreators from '../actions/authActions';
+import { injectIntl, intlShape } from 'react-intl';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -15,28 +16,33 @@ class LoginPage extends React.Component {
   }
 
   onSubmit(values) {
-    console.table({
-      email: values.username,
-      password: values.password
-    });
     this.props.authActions.loginLocal({
+      type: 'local',
       email: values.username,
       password: values.password
-    });
+    }, this.context.feathers);
   }
 
   render() {
+    const { intl } = this.props;
+    const appTitle = intl.formatMessage({id: 'appTitle'});
+    const loginTitle = intl.formatMessage({id: 'loginTitle'});
+
+    const errors = this.props.auth.loginErrors.map((error) => {
+      return error.message;
+    });
+
     return (
       <Box align="center" full="vertical">
         <Header size="medium"/>
         <LoginForm
           logo={<Logo />}
-          title="React Feathers"
-          secondaryText="Login"
+          title={appTitle}
+          secondaryText={loginTitle}
           rememberMe={false}
           usernameType={'email'}
           onSubmit={this.onSubmit}
-          errors={[this.props.auth.errorMessage]}
+          errors={errors}
         />
       </Box>
     );
@@ -44,11 +50,18 @@ class LoginPage extends React.Component {
 }
 
 LoginPage.propTypes = {
+  intl: intlShape,
   auth: React.PropTypes.object,
   authActions: React.PropTypes.object
 };
 
 LoginPage.defaultProps = {};
+
+LoginPage.contextTypes = {
+  feathers: React.PropTypes.object
+};
+
+LoginPage = injectIntl(LoginPage);
 
 function mapStateToProps(state) {
   return {

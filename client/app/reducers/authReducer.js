@@ -1,12 +1,17 @@
 import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  LOGOUT_SUCCESS
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAILURE
 } from '../actions/authActions';
 
 const initialState = {
   isAuthenticated: false,
-  errorMessage: ''
+  loginErrors: [],
+  user: null,
+  signupErrors: []
 };
 
 export default function authReducer(state = initialState, action) {
@@ -15,19 +20,33 @@ export default function authReducer(state = initialState, action) {
       return {
         ...state,
         isAuthenticated: true,
-        errorMessage: ''
+        user: action.user,
+        loginErrors: []
       };
     case LOGIN_FAILURE:
       return {
         ...state,
         isAuthenticated: false,
-        errorMessage: action.message
+        user: null,
+        loginErrors: [action.message]
       };
     case LOGOUT_SUCCESS:
       return {
         ...state,
         isAuthenticated: false,
-        errorMessage: ''
+        user: null,
+        loginErrors: []
+      };
+    case SIGNUP_SUCCESS:
+      return {
+        ...state,
+        user: action.user,
+        signupErrors: []
+      };
+    case SIGNUP_FAILURE:
+      return {
+        ...state,
+        signupErrors: action.message.errors
       };
     default:
       return state;

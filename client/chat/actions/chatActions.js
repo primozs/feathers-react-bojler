@@ -18,7 +18,7 @@ export function sendMessage(text, feathers) {
         dispatch(sendMessageSuccess(message));
       })
       .catch((err) => {
-        dispatch(sendMessageFailure('Message could not be send'))
+        dispatch(sendMessageFailure('Message could not be send: ' + err.message))
       });
   };
 }
@@ -36,14 +36,20 @@ export function getMessagesFailure(message) {
 
 export function findMessages(options, msgService) {
   return function(dispatch, getState) {
-    msgService.find(options)
+    return msgService.find(options)
       .then((res) => {
         dispatch(getMessagesSuccess(res.data));
       })
       .catch((err) => {
-        dispatch(getMessagesFailure('Messages could not be fetched'));
+        dispatch(getMessagesFailure('Messages could not be fetched: ' + err.message));
       });
   };
+}
+
+export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
+
+export function getUserSuccess(user) {
+  return {type: GET_USER_SUCCESS, user}
 }
 
 export const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
@@ -59,12 +65,12 @@ export function getUsersFailure(message) {
 
 export function findUsers(userService) {
   return function(dispatch, getState) {
-    userService.find()
+    return userService.find()
       .then((res) => {
         dispatch(getUsersSuccess(res.data));
       })
       .catch((err) => {
-        dispatch(getUsersFailure('Users could not be fetched'));
+        dispatch(getUsersFailure('Users could not be fetched: ' + err.message));
       });
   };
 }

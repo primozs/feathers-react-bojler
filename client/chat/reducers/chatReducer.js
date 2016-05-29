@@ -3,8 +3,9 @@ import {
   SEND_MESSAGE_FAILURE,
   GET_MESSAGES_SUCCESS,
   GET_MESSAGES_FAILURE,
+  GET_USER_SUCCESS,
   GET_USERS_SUCCESS,
-  GET_USERS_FAILURE
+  GET_USERS_FAILURE,
 } from '../actions/chatActions';
 
 const initialState = {
@@ -19,6 +20,7 @@ export default function chatReducer(state = initialState, action) {
   switch (action.type) {
     case SEND_MESSAGE_SUCCESS:
       return {
+        ...state,
         messages: [...state.messages, action.message],
         createErrMsg: ''
       };
@@ -37,6 +39,11 @@ export default function chatReducer(state = initialState, action) {
       return {
         ...state,
         findErrMsg: action.message
+      };
+    case GET_USER_SUCCESS:
+      return {
+        ...state,
+        users: [...state.users, action.user]
       };
     case GET_USERS_SUCCESS:
       return {

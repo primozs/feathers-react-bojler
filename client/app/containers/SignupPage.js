@@ -7,6 +7,9 @@ import Button from 'grommet/components/Button';
 import FormField from 'grommet/components/FormField';
 import Footer from 'grommet/components/Footer';
 import Logo from '../components/Logo';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as authActionCreators from '../../app/actions/authActions';
 
 const CLASS_ROOT = 'login-form';
 
@@ -21,7 +24,10 @@ class SignupPage extends React.Component {
     let email = this.refs.email.value.trim();
     let password = this.refs.password.value.trim();
 
-    console.log('on submit', email, password);
+    this.props.authActions.signup({
+      email,
+      password
+    }, this.context.feathers);
   }
 
   componentDidMount() {
@@ -32,8 +38,8 @@ class SignupPage extends React.Component {
     let username = <FormattedMessage id="Email" defaultMessage="Email" />;
     let password = <FormattedMessage id="Password" defaultMessage="Password" />;
     let signup = <FormattedMessage id="Signup" defaultMessage="Signup" />;
-    let signupTitle = <FormattedMessage id="signupTitle" defaultMessage="React Feathers" />;
-    let signupTitle2 = <FormattedMessage id="signupTitle2" defaultMessage="Signup for user account" />;
+    let appTitle = <FormattedMessage id="appTitle" defaultMessage="React Feathers" />;
+    let signupTitle = <FormattedMessage id="signupTitle" defaultMessage="Signup for user account" />;
 
     let classes = [CLASS_ROOT];
     classes.push(`${CLASS_ROOT}--align-center`);
@@ -44,22 +50,22 @@ class SignupPage extends React.Component {
 
     const title = (
       <h1 className={`${CLASS_ROOT}__title`}>
-        <strong>{signupTitle}</strong>
+        <strong>{appTitle}</strong>
       </h1>
     );
 
     const secondaryText = (
       <p className={`${CLASS_ROOT}__secondary-text secondary`}>
-        {signupTitle2}
+        {signupTitle}
       </p>
     );
 
-    let errors = this.props.errors.map(function (error, index) {
+    let errors = this.props.auth.signupErrors.map(function (error, index) {
       let errorComponent = undefined;
       if (error) {
         errorComponent = (
           <div key={index} className={`${CLASS_ROOT}__error error`}>
-            <FormattedMessage id={error} defaultMessage={error} />
+            <FormattedMessage id={error.message} defaultMessage={error.message} />
           </div>
         );
       }
@@ -107,10 +113,27 @@ class SignupPage extends React.Component {
 }
 
 SignupPage.propTypes = {
-  errors: PropTypes.arrayOf(PropTypes.string)
-};
-SignupPage.defaultProps = {
-  errors: []
+  auth: React.PropTypes.object,
+  authActions: React.PropTypes.object
 };
 
-export default SignupPage;
+SignupPage.contextTypes = {
+  feathers: React.PropTypes.object
+};
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    authActions: bindActionCreators(authActionCreators, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SignupPage);

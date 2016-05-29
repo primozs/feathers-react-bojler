@@ -7,6 +7,8 @@ import makeStore from '../../client/app/store/makeStoreSrv';
 import { fetchComponentData } from '../util/fetchData';
 import routes from '../../client/app/routes';
 import { getLocaleMessagesData } from '../../client/app/locale/util';
+import FeathersProvider from '../../client/feathers/FeathersProvider';
+import feathersApp from '../../client/feathers/makeFeathers';
 
 const renderFullPage = (html, initialState) => {
   const style = process.env.NODE_ENV === 'production'
@@ -72,13 +74,27 @@ module.exports = function() {
       const store = makeStore(initialState);
       const localeData = getLocaleData(req, res);
 
+      let cookies = req.cookies;
+      let feathersJwt = '';
+
+      if (cookies && 'feathers-jwt' in cookies) {
+        feathersJwt = cookies['feathers-jwt'];
+      }
+
+      renderProps.params = {
+        ...renderProps.params,
+        feathersJwt: feathersJwt,
+        feathers: feathersApp
+      };
+
       return fetchComponentData(store, renderProps.components, renderProps.params)
         .then(() => {
           const initialView = renderToString(
             <Provider store={store}>
-              <IntlProvider locale={localeData.locale}
-                            messages={localeData.messages}>
-                <RouterContext {...renderProps}/>
+              <IntlProvider locale={localeData.locale} messages={localeData.messages}>
+                <FeathersProvider feathers={feathersApp} feathersJwt={feathersJwt}>
+                  <RouterContext {...renderProps}/>
+                </FeathersProvider>
               </IntlProvider>
             </Provider>
           );

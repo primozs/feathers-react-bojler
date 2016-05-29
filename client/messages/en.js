@@ -17,5 +17,9 @@ module.exports = {
   "users": "{itemCount, plural, =0 {User} one {User} other {# Users}}",
   "Anonymous": "Anonymous",
   "Name": "Name",
-  "Email": "Email"
+  "Email": "Email",
+  "signupTitle": "Signup for user account",
+  "email must be unique": "Email must be unique",
+  "loginTitle": "Login to application",
+  "Profile": "Profile"
 };

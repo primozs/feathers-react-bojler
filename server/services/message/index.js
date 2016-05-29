@@ -26,4 +26,15 @@ module.exports = function(){
 
   // Set up our after hooks
   messageService.after(hooks.after);
+
+  messageService.filter('created', function(data, connection, hook) {
+    // The id of the user that created the message
+    const messageUserId = hook.params.user.id;
+
+    // dont trigger on created event for the user that created the message
+    if(connection.user.id === messageUserId) {
+      return false;
+    }
+    return data;
+  })
 };

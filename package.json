@@ -29,7 +29,7 @@
     "build:client": "NODE_ENV=production webpack --config webpack.config.prod.js",
     "build": "npm run build:server && npm run build:client_dir && npm run build:client",
     "start:prod": "NODE_ENV=production node dist/server/app.js",
-    "bs": "npm run clean && npm run copy:static && npm run copy:config && npm run build && npm run start:prod",
+    "build:start": "npm run clean && npm run copy:static && npm run copy:config && npm run build && npm run start:prod",
     "slate": "rimraf node_modules && npm install",
     "push": "git push origin && git push origin --tags",
     "lint": "eslint client server",
@@ -38,7 +38,6 @@
     "release:major": "npm version major"
   },
   "dependencies": {
-    "axios": "0.11.1",
     "body-parser": "1.15.1",
     "compression": "1.6.2",
     "cookie-parser": "1.4.3",
@@ -67,6 +66,7 @@
     "react-router": "2.4.1",
     "react-router-redux": "4.0.4",
     "redux": "3.5.2",
+    "redux-auth-wrapper": "0.5.0",
     "redux-form": "5.2.4",
     "redux-promise": "0.5.3",
     "redux-thunk": "2.1.0",
