@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from 'grommet/components/Box';
 import Header from 'grommet/components/Header';
+import Footer from 'grommet/components/Footer';
 import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
 import Split from 'grommet/components/Split';
@@ -55,6 +56,7 @@ class ChatApp extends React.Component {
             messages={this.props.chat.messages}
           />
           <ComposeMessage sendMessage={this.sendMessage}/>
+          <Footer size="large"/>
         </Box>
       </Split>
     );
@@ -73,14 +75,16 @@ ChatApp.contextTypes = {
   feathers: React.PropTypes.object
 };
 
-// ChatApp.need = [
-//  (params) => {
-//    return authActionCreators.keepLoginServer(params.feathersJwt, params.feathers);
-//  },
-//  (params) => {
-//    return chatActionCreators.findUsers(params.feathers.service('users'));
-//  }
-// ];
+ChatApp.need = [
+  //(params) => {
+  //  console.log('SERVER AUTHENTICATE keepLogin');
+  //  return authActionCreators.keepLoginServer(params.feathersJwt, params.feathers);
+  //},
+  (params) => {
+    console.log('SERVER CHATAPP findUsers');
+    return chatActionCreators.findUsers(params.feathers.service('users'));
+  }
+];
 
 function mapStateToProps(state) {
   return {

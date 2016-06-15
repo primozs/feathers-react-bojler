@@ -37,25 +37,32 @@ export function logoutFailure() {
  */
 export function loginLocal(options, app) {
   return function(dispatch, getState) {
-    app.authenticate(options)
+    return app.authenticate(options)
       .then((response) => {
         dispatch(loginSuccess(response.data));
         dispatch(push('/'));
+        return response;
       })
       .catch((err) => {
         dispatch(loginFailure(err.message));
+        return err;
       });
   };
 }
 
 export function keepLogin(feathers) {
   return function(dispatch, getState) {
-    feathers.authenticate()
+    console.log('keepLogin');
+    return feathers.authenticate()
       .then((response) => {
+        console.log('keepLogin THEN', response);
         dispatch(loginSuccess(response.data));
+        return response;
       })
       .catch((err) => {
+        console.log('keepLogin CATCH', err);
         dispatch(loginFailure('Keep login error: ' + err.message));
+        return err;
       });
   };
 }
@@ -76,28 +83,35 @@ export function keepLogin(feathers) {
  */
 export function keepLoginServer(token, feathers) {
   return function(dispatch, getState) {
+    console.log('keepLoginServer');
     return feathers.authenticate({
         type: 'token',
         'token': token
       })
       .then((response) => {
+        console.log('keepLoginServer THEN', response);
         dispatch(loginSuccess(response.data));
+        return response;
       })
       .catch((err) => {
-        dispatch(loginFailure('Keep login error: ' + err.message));
+        console.log('keepLoginServer CATCH', err);
+        dispatch(loginFailure('keepLoginServer error: ' + err.message));
+        return err;
       });
   };
 }
 
 export function logOut(app) {
   return function(dispatch, getState) {
-    app.logout()
+    return app.logout()
       .then((res) => {
         dispatch(logoutSuccess());
         dispatch(push('/login'));
+        return res;
       })
       .catch((err) => {
         dispatch(loginFailure(err));
+        return err;
       });
   };
 }
@@ -129,14 +143,16 @@ export function signupFailure(message) {
  */
 export function signup(options, app) {
   return function(dispatch, getState) {
-    app.service('users')
+    return app.service('users')
       .create(options)
-      .then((user) => {
+      .then((response) => {
         dispatch(signupSuccess());
         dispatch(push('/login'));
+        return response;
       })
       .catch((err) => {
         dispatch(signupFailure(err));
+        return err;
       });
   };
 }

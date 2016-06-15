@@ -40,10 +40,10 @@ class ChatSidebar extends React.Component {
             users.map((user) => {
               return (
                 <li key={user.id}>
-                  <a href="#">
+                  <Box direction="row">
                     <Image src={user.avatar || PLACEHOLDER} size="thumb"/>
                     <span style={{padding: '10px'}}>{user.email}</span>
-                  </a>
+                  </Box>
                 </li>
               );
             })

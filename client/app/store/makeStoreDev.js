@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import promiseMiddleware from 'redux-promise';
 import { browserHistory } from 'react-router';
 import { routerMiddleware } from 'react-router-redux';
 import createLogger from 'redux-logger';
@@ -11,7 +10,6 @@ const createStoreWithMiddleware = compose(
   applyMiddleware(
     historyRouterMiddleware,
     thunkMiddleware,
-    promiseMiddleware,
     createLogger({
       predicate: (getState, action) => {
         return (

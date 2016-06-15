@@ -18,8 +18,21 @@ class MessageList extends React.Component {
     };
 
     let items = this.props.messages.map((message) => {
-      const sender = typeof message.sentBy === 'object' ?
-        message.sentBy : dummyUser;
+      let sender;
+
+      if (!message.sentBy) {
+        sender = dummyUser;
+      } else {
+        const users = this.props.users.filter((user)=> {
+          return user.id === message.sentBy;
+        });
+
+        const email = (users.length > 0) ?  users[0].email : '';
+        sender = {
+          email: email,
+          avatar: PLACEHOLDER
+        };
+      }
 
       const style = {
         dl: {
@@ -43,19 +56,17 @@ class MessageList extends React.Component {
                     {sender.email}
                   </Paragraph>
                 </Box>
-                <Box pad={{horizontal: 'small'}}>
+                <Box pad={{horizontal: 'small'}} align="end">
                   <Paragraph margin="none" size="small">
-                    {
-                      // moment(message.createdAt).format('MMM Do, hh:mm:ss')
-                    }
-                    <FormattedRelative value={moment(message.createdAt)} /> {' '}
-                    <FormattedDate value={moment(message.createdAt)} />
+                    <FormattedRelative value={moment(message.createdAt)}/> {' '}
+                    <FormattedDate value={moment(message.createdAt)}/>
                   </Paragraph>
                 </Box>
               </Box>
               <Box pad={{horizontal: 'small'}}>
                 <dl style={style.dl}>
-                  <dt><FormattedMessage id="Message" defaultMessage="Message"/>:</dt>
+                  <dt><FormattedMessage id="Message" defaultMessage="Message"/>:
+                  </dt>
                   <dd style={style.dd}>{message.text}</dd>
                 </dl>
               </Box>

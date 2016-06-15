@@ -9,6 +9,7 @@ import routes from '../../client/app/routes';
 import { getLocaleMessagesData } from '../../client/app/locale/util';
 import FeathersProvider from '../../client/feathers/FeathersProvider';
 import feathersApp from '../../client/feathers/makeFeathers';
+import * as authActionCreators from '../../client/app/actions/authActions';
 
 const renderFullPage = (html, initialState) => {
   const style = process.env.NODE_ENV === 'production'
@@ -87,6 +88,29 @@ module.exports = function() {
         feathers: feathersApp
       };
 
+      //if (feathersJwt) {
+      //  return store.dispatch(authActionCreators.keepLoginServer(feathersJwt, feathersApp))
+      //    .then((res) => {
+      //      return fetchComponentData(store, renderProps.components, renderProps.params);
+      //    })
+      //    .then(() => {
+      //      const initialView = renderToString(
+      //        <Provider store={store}>
+      //          <IntlProvider locale={localeData.locale} messages={localeData.messages}>
+      //            <FeathersProvider feathers={feathersApp} feathersJwt={feathersJwt}>
+      //              <RouterContext {...renderProps}/>
+      //            </FeathersProvider>
+      //          </IntlProvider>
+      //        </Provider>
+      //      );
+      //      const finalState = store.getState();
+      //      res.status(200).end(renderFullPage(initialView, finalState));
+      //    })
+      //    .catch((err) => {
+      //      return res.status(500).end(renderError(err));
+      //    });
+      //}
+
       return fetchComponentData(store, renderProps.components, renderProps.params)
         .then(() => {
           const initialView = renderToString(
@@ -101,7 +125,7 @@ module.exports = function() {
           const finalState = store.getState();
           res.status(200).end(renderFullPage(initialView, finalState));
         })
-        .catch(function(err) {
+        .catch((err) => {
           return res.status(500).end(renderError(err));
         });
     });

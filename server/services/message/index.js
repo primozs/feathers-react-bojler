@@ -36,5 +36,5 @@ module.exports = function(){
       return false;
     }
     return data;
-  })
+  });
 };

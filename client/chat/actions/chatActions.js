@@ -12,13 +12,15 @@ export function sendMessageFailure(message) {
 
 export function sendMessage(text, feathers) {
   return function(dispatch, getState) {
-    feathers.service('messages')
+    return feathers.service('messages')
       .create({text: text})
       .then((message) => {
         dispatch(sendMessageSuccess(message));
+        return message;
       })
       .catch((err) => {
         dispatch(sendMessageFailure('Message could not be send: ' + err.message))
+        return err;
       });
   };
 }
@@ -36,12 +38,17 @@ export function getMessagesFailure(message) {
 
 export function findMessages(options, msgService) {
   return function(dispatch, getState) {
+    console.log('findMessages');
     return msgService.find(options)
       .then((res) => {
+        console.log('findMessages THEN');
         dispatch(getMessagesSuccess(res.data));
+        return res;
       })
       .catch((err) => {
+        console.log('findMessages ERR');
         dispatch(getMessagesFailure('Messages could not be fetched: ' + err.message));
+        return err;
       });
   };
 }
@@ -68,9 +75,11 @@ export function findUsers(userService) {
     return userService.find()
       .then((res) => {
         dispatch(getUsersSuccess(res.data));
+        return res;
       })
       .catch((err) => {
         dispatch(getUsersFailure('Users could not be fetched: ' + err.message));
+        return err;
       });
   };
 }

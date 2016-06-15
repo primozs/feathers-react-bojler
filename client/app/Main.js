@@ -4,8 +4,9 @@ import Header from 'grommet/components/Header';
 import Footer from 'grommet/components/Footer';
 import FormattedMessage from 'grommet/components/FormattedMessage';
 import AppHeader from './components/AppHeader';
+import Authenticate from './containers/Authenticate';
 
-class AppView extends React.Component {
+class Main extends React.Component {
   render() {
     return (
       <App centered={false} inline={true}>
@@ -30,12 +31,12 @@ class AppView extends React.Component {
   }
 }
 
-AppView.displayName = 'AppView';
+Main.displayName = 'Main';
 
-AppView.propTypes = {
+Main.propTypes = {
   children: PropTypes.any
 };
 
-AppView.defaultProps = {};
+Main.defaultProps = {};
 
-export default AppView;
+export default Main;

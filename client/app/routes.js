@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import AppView from './AppView';
+import Main from './Main';
 import HomePage from './containers/HomePage';
 import ChatPage from './containers/ChatPage';
 import LoginPage from './containers/LoginPage';
@@ -14,8 +14,9 @@ import {
   UserIsNotAuthenticated
 } from './containers/Authenticate';
 
+// component={authenticateComponent(Main)}
 const routes = (
-  <Route path="/" component={authenticateComponent(AppView)}>
+  <Route path="/" component={authenticateComponent(Main)}>
     <IndexRoute component={HomePage}/>
     <Route path="login" component={UserIsNotAuthenticated(LoginPage)} />
     <Route path="signup" component={UserIsNotAuthenticated(SignupPage)} />

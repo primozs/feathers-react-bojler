@@ -7,6 +7,7 @@ module.exports = function(options) {
   return function(hook) {
     // The authenticated user
     const user = hook.params.user;
+
     // The actual message text
     const text = hook.data.text
       // Messages can't be longer than 400 characters
@@ -17,7 +18,7 @@ module.exports = function(options) {
     // Override the original data
     hook.data = {
       text,
-      userId: user.id
+      sentBy: user.id
     };
   };
 };

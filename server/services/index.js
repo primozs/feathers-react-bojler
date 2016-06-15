@@ -3,9 +3,9 @@ const authentication = require('./authentication');
 const user = require('./user');
 const message = require('./message');
 const Sequelize = require('sequelize');
+
 module.exports = function() {
   const app = this;
-
   const sequelize = new Sequelize(app.get('mysql'), {
     dialect: 'mysql',
     logging: false
