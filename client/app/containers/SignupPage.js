@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import FormattedMessage from 'grommet/components/FormattedMessage';
 import Box from 'grommet/components/Box';
 import Header from 'grommet/components/Header';
@@ -7,8 +9,6 @@ import Button from 'grommet/components/Button';
 import FormField from 'grommet/components/FormField';
 import Footer from 'grommet/components/Footer';
 import Logo from '../components/Logo';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as authActionCreators from '../../app/actions/authActions';
 
 const CLASS_ROOT = 'login-form';
@@ -19,10 +19,14 @@ class SignupPage extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.email.focus();
+  }
+
   onSubmit(event) {
     event.preventDefault();
-    let email = this.refs.email.value.trim();
-    let password = this.refs.password.value.trim();
+    const email = this.email.value.trim();
+    const password = this.password.value.trim();
 
     this.props.authActions.signup({
       email,
@@ -30,18 +34,27 @@ class SignupPage extends React.Component {
     }, this.context.feathers);
   }
 
-  componentDidMount() {
-    this.refs.email.focus();
-  }
-
   render() {
-    let username = <FormattedMessage id="Email" defaultMessage="Email" />;
-    let password = <FormattedMessage id="Password" defaultMessage="Password" />;
-    let signup = <FormattedMessage id="Signup" defaultMessage="Signup" />;
-    let appTitle = <FormattedMessage id="appTitle" defaultMessage="React Feathers" />;
-    let signupTitle = <FormattedMessage id="signupTitle" defaultMessage="Signup for user account" />;
+    const username = (
+      <FormattedMessage id="Email" defaultMessage="Email" />
+    );
+    const password = (
+      <FormattedMessage id="Password" defaultMessage="Password" />
+    );
+    const signup = (
+      <FormattedMessage id="Signup" defaultMessage="Signup" />
+    );
+    const appTitle = (
+      <FormattedMessage id="appTitle" defaultMessage="React Feathers" />
+    );
+    const signupTitle = (
+      <FormattedMessage
+        id="signupTitle"
+        defaultMessage="Signup for user account"
+      />
+    );
 
-    let classes = [CLASS_ROOT];
+    const classes = [CLASS_ROOT];
     classes.push(`${CLASS_ROOT}--align-center`);
 
     const logo = (
@@ -60,12 +73,15 @@ class SignupPage extends React.Component {
       </p>
     );
 
-    let errors = this.props.auth.signupErrors.map(function (error, index) {
-      let errorComponent = undefined;
+    const errors = this.props.auth.signupErrors.map((error, index) => {
+      let errorComponent;
       if (error) {
         errorComponent = (
           <div key={index} className={`${CLASS_ROOT}__error error`}>
-            <FormattedMessage id={error.message} defaultMessage={error.message} />
+            <FormattedMessage
+              id={error.message}
+              defaultMessage={error.message}
+            />
           </div>
         );
       }
@@ -74,7 +90,7 @@ class SignupPage extends React.Component {
 
     return (
       <Box align="center" full="vertical">
-        <Header size="medium"/>
+        <Header size="medium" />
         <Form className={classes.join(' ')} onSubmit={this.onSubmit}>
           <div className={`${CLASS_ROOT}__header`}>
             {logo}
@@ -83,18 +99,31 @@ class SignupPage extends React.Component {
           </div>
           <fieldset>
             <FormField htmlFor="email" label={username}>
-              <input id="email" ref="email" type="email" defaultValue={""} />
+              <input
+                id="email"
+                ref={(email) => {
+                  this.email = email;
+                }}
+                type="email"
+                defaultValue={''}
+              />
             </FormField>
             <FormField htmlFor="password" label={password}>
-              <input id="password" ref="password" type="password" />
+              <input
+                id="password"
+                ref={(passwd) => {
+                  this.password = passwd;
+                }}
+                type="password"
+              />
             </FormField>
             {errors}
             <Footer
               align={this.props.align}
               size="small"
               direction="column"
-              pad={{vertical: 'medium', between: 'medium'}}>
-
+              pad={{ vertical: 'medium', between: 'medium' }}
+            >
               <Button
                 id={`${CLASS_ROOT}__submit`}
                 primary={true}
@@ -113,12 +142,13 @@ class SignupPage extends React.Component {
 }
 
 SignupPage.propTypes = {
-  auth: React.PropTypes.object,
-  authActions: React.PropTypes.object
+  auth: PropTypes.object,
+  authActions: PropTypes.object,
+  align: PropTypes.string
 };
 
 SignupPage.contextTypes = {
-  feathers: React.PropTypes.object
+  feathers: PropTypes.object
 };
 
 function mapStateToProps(state) {

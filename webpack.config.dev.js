@@ -1,8 +1,24 @@
-var webpack = require('webpack');
 var path = require('path');
+var webpack = require('webpack');
+var ProgressBarPlugin = require('progress-bar-webpack-plugin');
+
+var styleLoaders = [
+  'style-loader',
+  'css-loader?sourceMap',
+  'autoprefixer-loader?browsers=last 2 version',
+  'sass-loader?sourceMap&outputStyle=expanded&' +
+  'includePaths[]=' +
+  (encodeURIComponent(path.resolve(process.cwd(), './node_modules')))
+];
+
+var cssLoaders = [
+  'style-loader',
+  'css-loader?sourceMap',
+  'autoprefixer-loader?browsers=last 2 version'
+];
 
 module.exports = {
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-source-map',
 
   entry: [
     'webpack-hot-middleware/client',
@@ -10,9 +26,9 @@ module.exports = {
   ],
 
   output: {
-    path: __dirname + '/dev/',
-    filename: 'bundle.js',
-    publicPath: '/dev/'
+    path: __dirname + '/',
+    filename: 'app.js',
+    publicPath: '/'
   },
 
   resolve: {
@@ -20,43 +36,34 @@ module.exports = {
   },
 
   module: {
+    preLoaders: [{
+      test: /\.js$|\.test.js$/,
+      loaders: ['eslint'],
+      include: [
+        path.resolve(__dirname, 'client'),
+        path.resolve(__dirname, 'server')
+      ]
+    }],
     loaders: [
       {
         test: /\.json$/,
         loader: 'json-loader'
       },
       {
-        test: /\.png$/,
-        loader: 'file-loader?mimetype=image/png'
+        test: /\.(png|jpg|svg)$/,
+        loader: "url-loader?limit=10000&mimetype=image/svg+xml"
       },
       {
-        test: /\.jpg$/,
-        loader: 'file-loader?mimetype=image/jpg'
-      },
-      {
-        test: /\.woff$/,
-        loader: 'file-loader?mimetype=application/font-woff'
-      },
-      {
-        test: /\.otf$/,
-        loader: 'file-loader?mimetype=application/font/opentype'
+        test: /\.(woff|ttf|png|gif|jpg|jpeg)$/,
+        loader: 'file-loader'
       },
       {
         test: /\.scss$/,
-        loader: 'style!css!sass?outputStyle=expanded&' +
-        'includePaths[]=' +
-        (encodeURIComponent(
-          path.resolve(process.cwd(), './node_modules')
-        )) +
-        '&includePaths[]=' +
-        (encodeURIComponent(
-            path.resolve( process.cwd(),
-              './node_modules/grommet/node_modules'))
-        )
+        loader: styleLoaders.join('!')
       },
       {
         test: /\.css$/,
-        loader: 'style!css?modules'
+        loader: cssLoaders.join('!')
       },
       {
         test: /\.jsx*$/,
@@ -70,7 +77,9 @@ module.exports = {
   },
 
   plugins: [
+    new ProgressBarPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('development'),

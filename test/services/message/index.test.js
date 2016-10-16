@@ -1,10 +1,7 @@
-'use strict';
-
-const assert = require('assert');
-const app = require('../../../src/app');
+const app = require('../../../server/app');
 
 describe('message service', function() {
   it('registered the messages service', () => {
-    assert.ok(app.service('messages'));
+    expect(app.service('messages')).toBeTruthy();
   });
 });

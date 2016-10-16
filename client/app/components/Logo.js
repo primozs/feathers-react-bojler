@@ -1,26 +1,28 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-class Logo extends React.Component {
-  render() {
-    let size = this.props.size;
-    let options;
+const Logo = ({ size, title }) => {
+  let options;
 
-    switch(size) {
-      case 'small':
-        options = {width: '35px', ...options};
-    }
-
-    return (
-      <div className="logo" style={{margin: '10px'}}>
-        <img src="/favicon.png" alt={this.props.title} {...options}/>
-      </div>
-    );
+  switch (size) {
+    case 'small':
+      options = { width: '35px' };
+      break;
+    default:
+      options = { width: '50px' };
   }
-}
+
+  return (
+    <div className="logo" style={{ margin: '10px' }}>
+      <img src="/favicon.png" alt={title} {...options} />
+    </div>
+  );
+};
 
 Logo.propTypes = {
-  size: React.PropTypes.string
+  title: PropTypes.string,
+  size: PropTypes.string
 };
+
 Logo.defaultProps = {
   size: 'full'
 };

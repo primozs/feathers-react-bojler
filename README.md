@@ -41,3 +41,9 @@ npm run build:start
 ```
 http://localhost:3333/
 ```
+
+TODO:
+- ROUTES
+    - 404
+    - home
+    - contact

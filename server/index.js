@@ -1,3 +1,2 @@
-require('babel-register');
-require('babel-polyfill');
+require('babel-register'); // eslint-disable-line
 require('./start');

@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
 var ProgressBarPlugin = require('progress-bar-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 var ManifestPlugin = require('webpack-manifest-plugin');
@@ -24,8 +25,21 @@ const vendor = [
   'react', 'react-dom'
 ];
 
+
+var statsOptions = {
+  filename: "stats.json",
+  fields: null,
+  transform: function (data) {
+    data.modules.forEach(function (m) {
+      delete m.source;
+    });
+    delete data.children;
+    return JSON.stringify(data, null, 2);
+  }
+};
+
 module.exports = {
-  devtool: 'hidden-source-map',
+  devtool: 'source-map',
 
   entry: {
     app: __dirname + '/client/index.js',
@@ -79,7 +93,7 @@ module.exports = {
       clear: false
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'manifest'],
+      names: ['app', 'vendor', 'manifest'],
       // name: 'vendor',
       minChunks: Infinity,
       children: true,
@@ -110,7 +124,8 @@ module.exports = {
         unused: true,
         if_return: true,
         join_vars: true
-      }
+      },
+      comments: /^\**!|^ [0-9]+ $|@preserve|@license/
     }),
     new CompressionPlugin(),
     new WebpackMd5Hash(),
@@ -118,6 +133,7 @@ module.exports = {
     new ChunkManifestPlugin({
       filename: 'chunk-manifest.json',
       manifestVariable: 'webpackManifest',
-    })
+    }),
+    new StatsWriterPlugin(statsOptions)
   ]
 };

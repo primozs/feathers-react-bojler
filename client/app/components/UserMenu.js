@@ -1,24 +1,21 @@
 import React from 'react';
 import Menu from 'grommet/components/Menu';
-import Anchor from 'grommet/components/Anchor';
-import FormattedMessage from 'grommet/components/FormattedMessage';
+import MenuItem from './MenuItem';
 
-class UserMenu extends React.Component {
-  onMenuClick(item) {
-    this.props.onMenuClick(item);
-  }
-
+class UserMenu extends React.Component { // eslint-disable-line
   render() {
-    let userMenuItems = this.props.menuItems.map((item) => {
+    let userMenuItems = [];
+
+    this.props.menuItems.forEach((item) => {
       if (typeof item.auth === 'undefined' ||
         item.auth === this.props.isAuthenticated) {
-        return (
-          <Anchor
-            key={item.label}
-            label={<FormattedMessage id={item.label} defaultMessage={item.label}/>}
-            onClick={this.onMenuClick.bind(this, item.loc)}
+        userMenuItems = [
+          ...userMenuItems,
+          <MenuItem
+            key={item.label} item={item} value={item.loc}
+            onClick={this.props.onMenuClick}
           />
-        );
+        ];
       }
     });
 
@@ -27,7 +24,8 @@ class UserMenu extends React.Component {
         pad={this.props.pad}
         direction={this.props.direction}
         align={this.props.align}
-        responsive={this.props.responsive}>
+        responsive={this.props.responsive}
+      >
         {userMenuItems}
       </Menu>
     );

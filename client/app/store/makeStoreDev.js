@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { browserHistory } from 'react-router';
 import { routerMiddleware } from 'react-router-redux';
-import createLogger from 'redux-logger';
+import createLogger from 'redux-logger'; // eslint-disable-line
 import rootReducer from '../reducers/index';
 
 const historyRouterMiddleware = routerMiddleware(browserHistory);
@@ -18,7 +18,7 @@ const createStoreWithMiddleware = compose(
       }
     })
   ),
-  window.devToolsExtension ? window.devToolsExtension() : f => f
+  window.devToolsExtension ? window.devToolsExtension() : (f) => f
 )(createStore);
 
 export default function makeStore(initialState) {
@@ -28,6 +28,7 @@ export default function makeStore(initialState) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers/index', () => {
       const nextReducer = require('../reducers/index');
+
       store.replaceReducer(nextReducer);
     });
   }

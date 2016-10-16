@@ -1,13 +1,11 @@
 import React from 'react';
 import ChatApp from '../../chat/containers/ChatApp';
 
-class ChatPage extends React.Component {
-  render() {
-    return (
-      <ChatApp />
-    );
-  }
-}
+const ChatPage = () => {
+  return (
+    <ChatApp />
+  );
+};
 
 ChatPage.propTypes = {};
 ChatPage.defaultProps = {};

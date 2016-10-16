@@ -1,6 +1,4 @@
 import { addLocaleData } from 'react-intl';
-import en from 'react-intl/locale-data/en';
-import sl from 'react-intl/locale-data/sl';
 import { getCurrentLocale, getLocaleData } from 'grommet/utils/Locale';
 import Cookies from 'grommet/utils/Cookies';
 
@@ -12,7 +10,7 @@ import Cookies from 'grommet/utils/Cookies';
  *
  * @returns {Object}
  */
-export function getLocaleMessagesData(locale = '') {
+export default function getLocaleMessagesData(locale = '') {
   if (process.env.CLIENT) {
     locale = Cookies.get('language');
   }
@@ -20,13 +18,20 @@ export function getLocaleMessagesData(locale = '') {
   if (!locale) {
     locale = getCurrentLocale();
   }
-  addLocaleData([...en, ...sl]);
 
+  let localeData;
   let messages;
-  try {
-    messages = require(`../../messages/${locale}`);
-  } catch (e) {
+
+  if (locale === 'sl') {
+    localeData = require('react-intl/locale-data/sl');
+    messages = require('../../messages/sl');
+  } else {
+    locale = 'en';
+    localeData = require('react-intl/locale-data/en');
     messages = require('../../messages/en');
   }
+
+  addLocaleData([...localeData]);
+
   return getLocaleData(messages, locale);
 }

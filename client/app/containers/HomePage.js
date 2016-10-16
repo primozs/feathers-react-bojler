@@ -5,12 +5,17 @@ import Footer from 'grommet/components/Footer';
 import Title from 'grommet/components/Title';
 import FormattedMessage from 'grommet/components/FormattedMessage';
 import Paragraph from 'grommet/components/Paragraph';
+import Helmet from 'react-helmet';
 
-class HomePage extends React.Component {
+class HomePage extends React.Component { // eslint-disable-line
   render() {
     return (
       <Box pad="medium" full="vertical">
-        <Header size="medium"/>
+        <FormattedMessage id="appTitle" defaultMessage="appTitle">
+          {(message) => <Helmet title={message} />}
+        </FormattedMessage>
+
+        <Header size="medium" />
         <Title>
           <FormattedMessage id="appTitle" defaultMessage="appTitle" />
         </Title>
@@ -19,7 +24,7 @@ class HomePage extends React.Component {
         </Paragraph>
         <Footer
           size="small"
-          pad={{vertical: 'small'}}
+          pad={{ vertical: 'small' }}
         />
       </Box>
     );

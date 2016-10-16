@@ -5,7 +5,7 @@ import {
   GET_MESSAGES_FAILURE,
   GET_USER_SUCCESS,
   GET_USERS_SUCCESS,
-  GET_USERS_FAILURE,
+  GET_USERS_FAILURE
 } from '../actions/chatActions';
 
 const initialState = {

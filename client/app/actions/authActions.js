@@ -1,4 +1,4 @@
-import { push } from 'react-router-redux'
+import { push } from 'react-router-redux';
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
@@ -6,22 +6,22 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 
 export function loginSuccess(user) {
-  return {type: LOGIN_SUCCESS, user};
+  return { type: LOGIN_SUCCESS, user };
 }
 
 export function loginFailure(message) {
   return {
     type: LOGIN_FAILURE,
-    message: message
+    message
   };
 }
 
 export function logoutSuccess() {
-  return {type: LOGOUT_SUCCESS};
+  return { type: LOGOUT_SUCCESS };
 }
 
 export function logoutFailure() {
-  return {type: LOGOUT_FAILURE};
+  return { type: LOGOUT_FAILURE };
 }
 
 /**
@@ -36,7 +36,7 @@ export function logoutFailure() {
  * @returns {Function}
  */
 export function loginLocal(options, app) {
-  return function(dispatch, getState) {
+  return (dispatch) => {
     return app.authenticate(options)
       .then((response) => {
         dispatch(loginSuccess(response.data));
@@ -51,17 +51,14 @@ export function loginLocal(options, app) {
 }
 
 export function keepLogin(feathers) {
-  return function(dispatch, getState) {
-    console.log('keepLogin');
+  return (dispatch) => {
     return feathers.authenticate()
       .then((response) => {
-        console.log('keepLogin THEN', response);
         dispatch(loginSuccess(response.data));
         return response;
       })
       .catch((err) => {
-        console.log('keepLogin CATCH', err);
-        dispatch(loginFailure('Keep login error: ' + err.message));
+        dispatch(loginFailure(`Keep login error: ${err.message}`));
         return err;
       });
   };
@@ -82,27 +79,21 @@ export function keepLogin(feathers) {
  * @returns {Function}
  */
 export function keepLoginServer(token, feathers) {
-  return function(dispatch, getState) {
-    console.log('keepLoginServer');
-    return feathers.authenticate({
-        type: 'token',
-        'token': token
-      })
+  return (dispatch) => {
+    return feathers.authenticate({ type: 'token', token })
       .then((response) => {
-        console.log('keepLoginServer THEN', response);
         dispatch(loginSuccess(response.data));
         return response;
       })
       .catch((err) => {
-        console.log('keepLoginServer CATCH', err);
-        dispatch(loginFailure('keepLoginServer error: ' + err.message));
+        dispatch(loginFailure(`keepLoginServer error: ${err.message}`));
         return err;
       });
   };
 }
 
 export function logOut(app) {
-  return function(dispatch, getState) {
+  return (dispatch) => {
     return app.logout()
       .then((res) => {
         dispatch(logoutSuccess());
@@ -120,13 +111,13 @@ export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
 
 export function signupSuccess(user) {
-  return {type: SIGNUP_SUCCESS, user};
+  return { type: SIGNUP_SUCCESS, user };
 }
 
 export function signupFailure(message) {
   return {
     type: SIGNUP_FAILURE,
-    message: message
+    message
   };
 }
 
@@ -142,7 +133,7 @@ export function signupFailure(message) {
  * @returns {Function}
  */
 export function signup(options, app) {
-  return function(dispatch, getState) {
+  return (dispatch) => {
     return app.service('users')
       .create(options)
       .then((response) => {

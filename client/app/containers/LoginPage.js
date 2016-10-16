@@ -2,12 +2,11 @@ import React from 'react';
 import Box from 'grommet/components/Box';
 import Header from 'grommet/components/Header';
 import LoginForm from 'grommet/components/LoginForm';
-import Logo from '../components/Logo';
-import Anchor from 'grommet/components/Anchor';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as authActionCreators from '../actions/authActions';
 import { injectIntl, intlShape } from 'react-intl';
+import Logo from '../components/Logo';
+import * as authActionCreators from '../actions/authActions';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -25,8 +24,8 @@ class LoginPage extends React.Component {
 
   render() {
     const { intl } = this.props;
-    const appTitle = intl.formatMessage({id: 'appTitle'});
-    const loginTitle = intl.formatMessage({id: 'loginTitle'});
+    const appTitle = intl.formatMessage({ id: 'appTitle' });
+    const loginTitle = intl.formatMessage({ id: 'loginTitle' });
 
     const errors = this.props.auth.loginErrors.map((error) => {
       return error.message;
@@ -34,7 +33,7 @@ class LoginPage extends React.Component {
 
     return (
       <Box align="center" full="vertical">
-        <Header size="medium"/>
+        <Header size="medium" />
         <LoginForm
           logo={<Logo />}
           title={appTitle}
@@ -61,8 +60,6 @@ LoginPage.contextTypes = {
   feathers: React.PropTypes.object
 };
 
-LoginPage = injectIntl(LoginPage);
-
 function mapStateToProps(state) {
   return {
     auth: state.auth
@@ -78,4 +75,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LoginPage);
+)(injectIntl(LoginPage));

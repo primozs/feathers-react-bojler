@@ -1,5 +1,3 @@
-'use strict';
-
 // message-model.js - A sequelize model
 //
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/

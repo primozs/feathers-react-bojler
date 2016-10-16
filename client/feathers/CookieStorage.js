@@ -7,6 +7,7 @@
 //   [NameDeleter] void removeItem(in DOMString key);
 //   void clear();
 // };
+/* eslint-disable */
 export default class CookieStorage {
   constructor(options) {
     options = options || {};
@@ -106,3 +107,5 @@ export default class CookieStorage {
     return parsed;
   }
 }
+
+/* eslint-enable */

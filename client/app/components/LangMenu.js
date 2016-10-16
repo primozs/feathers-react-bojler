@@ -1,10 +1,9 @@
 import React from 'react';
 import Menu from 'grommet/components/Menu';
 import Drop from 'grommet/utils/Drop';
-import Anchor from 'grommet/components/Anchor';
 import Language from 'grommet/components/icons/base/Language';
 import Cookies from 'grommet/utils/Cookies';
-import FormattedMessage from 'grommet/components/FormattedMessage';
+import MenuItem from './MenuItem';
 
 class LangMenu extends React.Component {
   onLanguageSelect(language) {
@@ -13,15 +12,13 @@ class LangMenu extends React.Component {
   }
 
   render() {
-    let { dropAlign, menuItems } = this.props;
-
-    let links = menuItems.map((item, index) => {
-      let key = `${item.label}-${index}`;
+    const { dropAlign, menuItems } = this.props;
+    const links = menuItems.map((item, index) => {
+      const key = `${item.label}-${index}`;
       return (
-        <Anchor
-          key={key}
-          label={<FormattedMessage id={item.label} defaultMessage={item.label} />}
-          onClick={this.onLanguageSelect.bind(this, item.language)}
+        <MenuItem
+          key={key} item={item} value={item.language}
+          onClick={this.onLanguageSelect}
         />
       );
     });
@@ -30,7 +27,8 @@ class LangMenu extends React.Component {
         size="small"
         dropAlign={dropAlign}
         responsive={true}
-        icon={<Language colorIndex="brand"/>}>
+        icon={<Language colorIndex="brand" />}
+      >
         {links}
       </Menu>
     );
@@ -38,10 +36,12 @@ class LangMenu extends React.Component {
 }
 
 LangMenu.displayName = 'LangMenu';
+
 LangMenu.propTypes = {
   dropAlign: Drop.alignPropType,
   menuItems: React.PropTypes.array
 };
+
 LangMenu.defaultProps = {
   direction: 'down'
 };

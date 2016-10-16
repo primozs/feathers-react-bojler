@@ -6,9 +6,9 @@ import Image from 'grommet/components/Image';
 import Footer from 'grommet/components/Footer';
 import Title from 'grommet/components/Title';
 import FormattedMessage from 'grommet/components/FormattedMessage';
-import UserMenu from '../../app/components/UserMenu';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import UserMenu from '../../app/components/UserMenu';
 
 const PLACEHOLDER = 'https://placeimg.com/60/60/people';
 
@@ -19,20 +19,22 @@ class ChatSidebar extends React.Component {
   }
 
   render() {
-    let { users } = this.props.chat;
+    const { users } = this.props.chat;
 
     return (
       <Sidebar fixed={true} size="medium" colorIndex="light-2">
-        <Header size="medium"/>
+        <Header size="medium" />
         <Header
           size="small"
           justify="between"
-          pad={{horizontal: 'medium'}}>
+          pad={{ horizontal: 'medium' }}
+        >
           <Title>
             <FormattedMessage
               id="users"
               defaultMessage="{itemCount, plural, =0 {User} one {User} other {# Users}}"
-              values={{itemCount: users.length}} />
+              values={{ itemCount: users.length }}
+            />
           </Title>
         </Header>
         <ul>
@@ -41,8 +43,8 @@ class ChatSidebar extends React.Component {
               return (
                 <li key={user.id}>
                   <Box direction="row">
-                    <Image src={user.avatar || PLACEHOLDER} size="thumb"/>
-                    <span style={{padding: '10px'}}>{user.email}</span>
+                    <Image src={user.avatar || PLACEHOLDER} size="thumb" />
+                    <span style={{ padding: '10px' }}>{user.email}</span>
                   </Box>
                 </li>
               );
@@ -50,12 +52,12 @@ class ChatSidebar extends React.Component {
           }
         </ul>
         <UserMenu
-          pad={{vertical: 'small', horizontal: 'medium'}}
+          pad={{ vertical: 'small', horizontal: 'medium' }}
           menuItems={this.props.nav.userMenu}
           isAuthenticated={this.props.auth.isAuthenticated}
-          onMenuClick={this.onMenuClick.bind(this)}
+          onMenuClick={this.onMenuClick}
         />
-        <Footer size="medium"/>
+        <Footer size="medium" />
       </Sidebar>
     );
   }
@@ -75,12 +77,6 @@ function mapStateToProps(state) {
     nav: state.nav,
     auth: state.auth,
     chat: state.chat
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch: dispatch
   };
 }
 

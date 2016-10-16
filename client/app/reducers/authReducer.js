@@ -2,7 +2,6 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   LOGOUT_SUCCESS,
-  LOGOUT_FAILURE,
   SIGNUP_SUCCESS,
   SIGNUP_FAILURE
 } from '../actions/authActions';

@@ -5,16 +5,18 @@ import Title from 'grommet/components/Title';
 import Menu from 'grommet/components/Menu';
 import Anchor from 'grommet/components/Anchor';
 import FormattedMessage from 'grommet/components/FormattedMessage';
-import Logo from './Logo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Logo from './Logo';
 import * as authActionCreators from '../../app/actions/authActions';
 import UserMenu from './UserMenu';
 import LangMenu from './LangMenu';
+import MenuItem from './MenuItem';
 
 class AppHeader extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(...args) {
+    super(...args);
+    this.onMenuClick = this.onMenuClick.bind(this);
   }
 
   onMenuClick(location) {
@@ -26,21 +28,20 @@ class AppHeader extends React.Component {
   }
 
   render() {
-    let mainMenuItems = this.props.nav.mainMenu.map((item) => {
+    const mainMenuItems = this.props.nav.mainMenu.map((item) => {
       return (
-        <Anchor
-          key={item.label}
-          label={<FormattedMessage id={item.label} defaultMessage={item.label}/>}
-          onClick={this.onMenuClick.bind(this, item.loc)}
+        <MenuItem
+          key={item.label} item={item} value={item.loc}
+          onClick={this.onMenuClick}
         />
       );
     });
 
     let userEmail = null;
     if (this.props.auth.user) {
-      let email = this.props.auth.user.email.split('@')[0];
+      const email = this.props.auth.user.email.split('@')[0];
       userEmail = (
-        <Menu direction="row" pad={{horizontal: 'small'}}>
+        <Menu direction="row" pad={{ horizontal: 'small' }}>
           <Anchor>{email}</Anchor>
         </Menu>
       );
@@ -54,10 +55,16 @@ class AppHeader extends React.Component {
         size={'small'}
         justify="between"
         colorIndex="neutral-1"
-        pad={{horizontal: 'small'}}>
-        <Title pad={{horizontal: 'small'}}>
-          <Logo size="small"/>
-          <span><FormattedMessage id="appTitle" defaultMessage="React Feathers"/></span>
+        pad={{ horizontal: 'small' }}
+      >
+        <Title pad={{ horizontal: 'small' }}>
+          <Logo size="small" />
+          <span>
+            <FormattedMessage
+              id="appTitle"
+              defaultMessage="React Feathers"
+            />
+          </span>
           <Menu direction="row" align="start" responsive={false}>
             {mainMenuItems}
           </Menu>
@@ -66,13 +73,13 @@ class AppHeader extends React.Component {
           <UserMenu
             menuItems={this.props.nav.userMenu}
             isAuthenticated={this.props.auth.isAuthenticated}
-            onMenuClick={this.onMenuClick.bind(this)}
+            onMenuClick={this.onMenuClick}
           />
           {userEmail}
-        <LangMenu
-          dropAlign={{right: 'right', top: 'top', direction: 'right'}}
-          menuItems={this.props.nav.languages}
-        />
+          <LangMenu
+            dropAlign={{ right: 'right', top: 'top', direction: 'right' }}
+            menuItems={this.props.nav.languages}
+          />
         </Box>
       </Header>
     );

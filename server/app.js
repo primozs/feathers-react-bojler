@@ -1,5 +1,3 @@
-'use strict';
-
 const path = require('path');
 const serveStatic = require('feathers').static;
 const favicon = require('serve-favicon');
@@ -19,7 +17,8 @@ const app = feathers();
 
 app.configure(configuration(path.join(__dirname, '..')));
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'development') {
+  /* eslint-disable */
   const webpack = require('webpack');
   const config = require('../webpack.config.dev');
   const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -31,6 +30,7 @@ if (process.env.NODE_ENV !== 'production') {
     publicPath: config.output.publicPath
   }));
   app.use(webpackHotMiddleware(compiler));
+  /* eslint-enable */
 }
 
 app.use(compress())
@@ -39,8 +39,8 @@ app.use(compress())
   .use(favicon(path.join(app.get('public'), 'favicon.ico')))
   .use('/', serveStatic(app.get('public')))
   .use(cookieParser())
-  .use(bodyParser.json({limit: '20mb'}))
-  .use(bodyParser.urlencoded({limit: '20mb', extended: true}))
+  .use(bodyParser.json({ limit: '20mb' }))
+  .use(bodyParser.urlencoded({ extended: true }))
   .configure(hooks())
   .configure(rest())
   .configure(socketio())
@@ -48,3 +48,4 @@ app.use(compress())
   .configure(middleware);
 
 export default app;
+module.exports = app;

@@ -1,10 +1,8 @@
-'use strict';
-
 const service = require('feathers-sequelize');
 const message = require('./message-model');
 const hooks = require('./hooks');
 
-module.exports = function(){
+module.exports = function() {
   const app = this;
 
   const options = {
@@ -27,12 +25,12 @@ module.exports = function(){
   // Set up our after hooks
   messageService.after(hooks.after);
 
-  messageService.filter('created', function(data, connection, hook) {
+  messageService.filter('created', (data, connection, hook) => {
     // The id of the user that created the message
     const messageUserId = hook.params.user.id;
 
     // dont trigger on created event for the user that created the message
-    if(connection.user.id === messageUserId) {
+    if (connection.user.id === messageUserId) {
       return false;
     }
     return data;

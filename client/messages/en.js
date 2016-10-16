@@ -1,7 +1,7 @@
-/* eslint quotes: 0 */
+/* eslint-disable */
 
 module.exports = {
-  "appTitle": 'React Feathers',
+  "appTitle": "React Feathers",
   "appTitle2": "Demo app",
   "slovenian": "Slovenian",
   "english": "English",
@@ -23,3 +23,5 @@ module.exports = {
   "loginTitle": "Login to application",
   "Profile": "Profile"
 };
+
+/* eslint-enable */

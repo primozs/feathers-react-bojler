@@ -2,31 +2,31 @@
  * Check authentication
  * https://github.com/mjrussell/redux-auth-wrapper
  */
-import React from 'react';
-import { UserAuthWrapper } from 'redux-auth-wrapper';
+import React, { PropTypes } from 'react';
+import { UserAuthWrapper as userAuthWrapper } from 'redux-auth-wrapper';
 import { routerActions } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as authActionCreators from '../actions/authActions';
 
-export const UserIsAuthenticated = UserAuthWrapper({
+export const userIsAuthenticated = userAuthWrapper({
   authSelector: (state) => state.auth,
   redirectAction: routerActions.replace,
   failureRedirectPath: '/login',
   predicate: (auth) => {
     return auth.isAuthenticated;
   },
-  wrapperDisplayName: 'UserIsAuthenticated'
+  wrapperDisplayName: 'userIsAuthenticated'
 });
 
-export const UserIsNotAuthenticated = UserAuthWrapper({
+export const userIsNotAuthenticated = userAuthWrapper({
   authSelector: (state) => state.auth,
   redirectAction: routerActions.replace,
   failureRedirectPath: '/profile',
   predicate: (auth) => {
     return !auth.isAuthenticated;
   },
-  wrapperDisplayName: 'UserIsNotAuthenticated'
+  wrapperDisplayName: 'userIsNotAuthenticated'
 });
 
 export function authenticateComponent(Component) {
@@ -40,29 +40,28 @@ export function authenticateComponent(Component) {
 
     checkAuth() {
       if (process.env.CLIENT) {
-        this.props.authActions.keepLogin(this.context.feathers)
+        this.props.authActions.keepLogin(this.context.feathers);
       }
     }
 
     render() {
       return (
-        <Component {...this.props}/>
+        <Component {...this.props} />
       );
     }
   }
 
   AuthComponent.propTypes = {
-    authActions: React.PropTypes.object,
-    auth: React.PropTypes.object
+    authActions: PropTypes.object,
+    auth: PropTypes.object // eslint-disable-line
   };
 
   AuthComponent.contextTypes = {
-    feathers: React.PropTypes.object.isRequired,
-    feathersJwt: React.PropTypes.string
+    feathers: PropTypes.object.isRequired,
+    feathersJwt: PropTypes.string
   };
 
   AuthComponent.need = [(params) => {
-    console.log('SERVER AUTHENTICATE keepLogin');
     return authActionCreators.keepLoginServer(params.feathersJwt, params.feathers);
   }];
 
@@ -80,50 +79,3 @@ export function authenticateComponent(Component) {
 
   return connect(mapStateToProps, mapDispatchToProps)(AuthComponent);
 }
-
-class Authenticate extends React.Component {
-  componentDidMount() {
-    this.checkAuth();
-  }
-
-  checkAuth() {
-    if (process.env.CLIENT) {
-      console.log('CLIENT Authenticate checkAuth keepLogin');
-      this.props.authActions.keepLogin(this.context.feathers)
-    }
-  }
-
-  render() {
-    return (
-      <span />
-    );
-  }
-}
-
-Authenticate.propTypes = {
-  authActions: React.PropTypes.object,
-  auth: React.PropTypes.object
-};
-
-Authenticate.contextTypes = {
-  feathers: React.PropTypes.object.isRequired
-};
-
-Authenticate.need = [(params) => {
-  console.log('SERVER AUTHENTICATE1 keepLogin');
-  return authActionCreators.keepLoginServer(params.feathersJwt, params.feathers);
-}];
-
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    authActions: bindActionCreators(authActionCreators, dispatch)
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Authenticate);

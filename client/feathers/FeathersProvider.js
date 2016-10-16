@@ -1,10 +1,6 @@
 import React from 'react';
 
 class FeathersProvider extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-  }
-
   getChildContext() {
     return {
       feathers: this.props.feathers,

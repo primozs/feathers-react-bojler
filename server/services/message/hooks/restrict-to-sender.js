@@ -1,5 +1,3 @@
-'use strict';
-
 // src/services/message/hooks/restrict-to-sender.js
 //
 // Use this hook to manipulate incoming or outgoing data.
@@ -12,7 +10,7 @@ module.exports = function(options) {
     const messageService = hook.app.service('messages');
 
     // First get the message that the user wants to access
-    return messageService.get(hook.id, hook.params).then(message => {
+    return messageService.get(hook.id, hook.params).then((message) => {
       // Throw a not authenticated error if the message and user id don't match
       if (message.sentBy.id !== hook.params.user.id) {
         throw new errors.NotAuthenticated('Access not allowed');

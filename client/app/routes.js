@@ -9,19 +9,17 @@ import ContactPage from './containers/ContactPage';
 import UserProfilePage from './containers/UserProfilePage';
 import {
   authenticateComponent,
-  requireAuthentication,
-  UserIsAuthenticated,
-  UserIsNotAuthenticated
+  userIsAuthenticated,
+  userIsNotAuthenticated
 } from './containers/Authenticate';
 
-// component={authenticateComponent(Main)}
 const routes = (
   <Route path="/" component={authenticateComponent(Main)}>
-    <IndexRoute component={HomePage}/>
-    <Route path="login" component={UserIsNotAuthenticated(LoginPage)} />
-    <Route path="signup" component={UserIsNotAuthenticated(SignupPage)} />
-    <Route path="profile" component={UserIsAuthenticated(UserProfilePage)} />
-    <Route path="chat" component={UserIsAuthenticated(ChatPage)} />
+    <IndexRoute component={HomePage} />
+    <Route path="login" component={userIsNotAuthenticated(LoginPage)} />
+    <Route path="signup" component={userIsNotAuthenticated(SignupPage)} />
+    <Route path="profile" component={userIsAuthenticated(UserProfilePage)} />
+    <Route path="chat" component={userIsAuthenticated(ChatPage)} />
     <Route path="contact" component={ContactPage} />
   </Route>
 );
